@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 
 tokenizer = AutoTokenizer.from_pretrained("cahya/bert2bert-indonesian-summarization")
 model = AutoModelForSeq2SeqLM.from_pretrained("cahya/bert2bert-indonesian-summarization")
@@ -9,7 +9,7 @@ model = AutoModelForSeq2SeqLM.from_pretrained("cahya/bert2bert-indonesian-summar
 @app.route('/', methods=['GET', 'POST'])
 def index():
     summary = ""
-    if request.method == 'POST':
+if request.method == 'POST':
         input_text = request.form['text']
         if len(input_text) > 50:
             inputs = tokenizer.encode("ringkasan: " + input_text, return_tensors="pt", max_length=512, truncation=True)
